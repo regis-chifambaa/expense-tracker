@@ -1,0 +1,319 @@
+/* =============================================
+   CSS VARIABLES
+   Define reusable colors here so if you want
+   to change the theme, you only edit one place.
+============================================= */
+:root {
+    --bg-dark:      #0b1120;   /* page background */
+    --bg-card:      #161f33;   /* main container card */
+    --bg-panel:     #1e2d47;   /* inner panels (income/expense boxes) */
+    --bg-input:     #0f1929;   /* input field background */
+    --accent:       #38bdf8;   /* blue accent (button, highlights) */
+    --accent-hover: #0ea5e9;   /* darker blue on hover */
+    --green:        #4ade80;   /* income / positive balance */
+    --red:          #f87171;   /* expense / negative balance */
+    --text-main:    #e2e8f0;   /* main text color */
+    --text-muted:   #94a3b8;   /* secondary/label text */
+    --border:       #2a3a55;   /* subtle border color */
+}
+
+/* =============================================
+   RESET & BASE
+   Remove default browser margin/padding and
+   set base font + background for the whole page.
+============================================= */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'DM Sans', sans-serif; /* clean readable body font */
+    background: var(--bg-dark);
+    color: var(--text-main);
+    display: flex;
+    justify-content: center;  /* center horizontally */
+    align-items: flex-start;  /* align to top */
+    min-height: 100vh;
+    padding: 40px 16px;
+}
+
+/* =============================================
+   CONTAINER (the main card)
+   Everything lives inside this centered box.
+============================================= */
+.container {
+    width: 100%;
+    max-width: 460px;
+    background: var(--bg-card);
+    padding: 28px 24px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    /* Soft glowing shadow to lift the card off the page */
+    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.5);
+
+    /* Fade-in animation when the page first loads */
+    animation: fadeIn 0.4s ease;
+}
+
+/* Page load fade-in keyframe */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* =============================================
+   HEADING
+============================================= */
+h1 {
+    font-family: 'Syne', sans-serif; /* bold display font for the title */
+    font-size: 1.6rem;
+    text-align: center;
+    letter-spacing: -0.5px;
+    margin-bottom: 24px;
+    color: #fff;
+}
+
+/* =============================================
+   BALANCE BOX
+   Large centered balance display at the top.
+============================================= */
+.balance-box {
+    text-align: center;
+    background: var(--bg-panel);
+    padding: 20px;
+    border-radius: 14px;
+    margin-bottom: 20px;
+    border: 1px solid var(--border);
+}
+
+.balance-box h2 {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+}
+
+/* The balance number — large and prominent */
+.balance-box p {
+    font-family: 'Syne', sans-serif;
+    font-size: 2.4rem;
+    font-weight: 800;
+    color: var(--text-main);
+    /* Smooth color transition when balance goes positive/negative */
+    transition: color 0.3s ease;
+}
+
+/* =============================================
+   INCOME / EXPENSE SUMMARY ROW
+   Two side-by-side panels below the balance.
+============================================= */
+.summary {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 24px;
+}
+
+/* Each panel takes equal width */
+.income, .expense {
+    flex: 1;
+    background: var(--bg-panel);
+    padding: 14px;
+    border-radius: 12px;
+    text-align: center;
+    border: 1px solid var(--border);
+}
+
+.income h3, .expense h3 {
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-muted);
+    margin-bottom: 6px;
+}
+
+/* Income amount is always green */
+.income p {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--green);
+}
+
+/* Expense amount is always red */
+.expense p {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--red);
+}
+
+/* =============================================
+   FORM
+   Input fields and the Add button.
+============================================= */
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 24px;
+}
+
+/* Label above each input */
+.form label {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 2px;
+}
+
+input {
+    padding: 12px 14px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: var(--bg-input);
+    color: var(--text-main);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    outline: none;
+    /* Subtle border glow when the user clicks into the field */
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15);
+}
+
+/* Placeholder text color */
+input::placeholder {
+    color: var(--text-muted);
+    opacity: 0.6;
+}
+
+/* The Add Transaction button */
+button {
+    padding: 12px;
+    border: none;
+    background: var(--accent);
+    color: #0b1120;
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 0.95rem;
+    border-radius: 10px;
+    cursor: pointer;
+    /* Smooth color + lift transition on hover */
+    transition: background 0.2s ease, transform 0.15s ease;
+}
+
+button:hover {
+    background: var(--accent-hover);
+    transform: translateY(-1px); /* slight lift effect */
+}
+
+button:active {
+    transform: translateY(0); /* press back down on click */
+}
+
+/* =============================================
+   ERROR MESSAGE
+   Shown below the form if inputs are empty.
+============================================= */
+.error-msg {
+    font-size: 0.82rem;
+    color: var(--red);
+    min-height: 18px; /* reserve space so layout doesn't jump */
+}
+
+/* =============================================
+   TRANSACTION LIST
+   Each item shows description, amount, delete btn.
+============================================= */
+ul {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+/* Section heading above the list */
+.list-title {
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-muted);
+    margin-bottom: 4px;
+}
+
+/* Individual transaction row */
+li {
+    background: var(--bg-panel);
+    padding: 12px 14px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    /* Slide-in animation when a new transaction is added */
+    animation: slideIn 0.25s ease;
+}
+
+@keyframes slideIn {
+    from { opacity: 0; transform: translateX(-8px); }
+    to   { opacity: 1; transform: translateX(0); }
+}
+
+/* Description text on the left */
+.li-desc {
+    flex: 1;
+    font-size: 0.92rem;
+    color: var(--text-main);
+}
+
+/* Amount on the right — color set dynamically by JavaScript */
+.li-amount {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 0.95rem;
+}
+
+/* Delete button — small red X on the far right */
+.delete {
+    background: transparent;
+    border: 1px solid rgba(248, 113, 113, 0.4);
+    color: var(--red);
+    padding: 4px 8px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.78rem;
+    font-weight: 700;
+    transition: background 0.2s ease, transform 0.15s ease;
+    flex-shrink: 0; /* prevent it from shrinking on small screens */
+}
+
+.delete:hover {
+    background: rgba(248, 113, 113, 0.15);
+    transform: scale(1.05);
+}
+
+/* =============================================
+   EMPTY STATE
+   Message shown when there are no transactions.
+============================================= */
+.empty-state {
+    text-align: center;
+    padding: 24px 0;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+.empty-state span {
+    display: block;
+    font-size: 2rem;
+    margin-bottom: 8px;
+}
