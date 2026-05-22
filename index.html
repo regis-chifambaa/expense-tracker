@@ -39,10 +39,10 @@
         <!-- FORM SECTION-->
         <div class="form">
             <!-- Text field -->
-            <input type="text" id="description" placeholder="Description (e.g. Groceries)">
+            <input type="text" id="description" placeholder="Description (e.g. Groceries)" onkeypress="if(event.key==='Enter') addTransaction()">
 
             <!-- Number field -->
-            <input type="number" id="amount" placeholder="Amount (e.g. 500 or -50)">
+            <input type="number" id="amount" placeholder="Amount (e.g. 500 or -50)" onkeypress="if(event.key==='Enter') addTransaction()">
 
             <button onclick="addTransaction()">+ Add Transaction</button>
 
@@ -54,6 +54,11 @@
         <ul id="transactionList">
             <!-- A empty state message shown when no transactions exist -->
         </ul>
+
+        <!-- EXPORT SECTION -->
+        <div class="export-section">
+            <button id="exportBtn" onclick="exportToCSV()" class="export-btn">📥 Export to CSV</button>
+        </div>
 
     </div>
 
