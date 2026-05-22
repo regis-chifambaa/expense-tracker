@@ -17,6 +17,8 @@ const incomeEl  = document.getElementById("income");         // total income dis
 const expenseEl = document.getElementById("expense");        // total expense display
 const listEl    = document.getElementById("transactionList"); // the <ul> list
 const errorEl   = document.getElementById("error-msg");      // error message paragraph
+const descEl    = document.getElementById("description");    // description input field
+const amountEl  = document.getElementById("amount");         // amount input field
 
 
 // =============================================
@@ -26,13 +28,26 @@ const errorEl   = document.getElementById("error-msg");      // error message pa
 function addTransaction() {
 
     // Read and clean up the values from the input fields
-    const desc   = document.getElementById("description").value.trim(); // .trim() removes accidental spaces
-    const amount = Number(document.getElementById("amount").value);      // convert string to number
+    const desc   = descEl.value.trim(); // .trim() removes accidental spaces
+    const amount = Number(amountEl.value);      // convert string to number
 
-    // VALIDATION: If either field is empty or amount is 0, show an error and stop
-    if (!desc || !amount) {
-        errorEl.textContent = "⚠ Please enter a description and a non-zero amount.";
+    // VALIDATION: Check for specific errors and provide targeted messages
+    // 1. Empty description check
+    if (!desc) {
+        errorEl.textContent = "⚠ Please enter a description.";
         return; // "return" exits the function early — nothing else runs
+    }
+
+    // 2. Invalid number check (including non-numeric input)
+    if (isNaN(amount) || !isFinite(amount)) {
+        errorEl.textContent = "⚠ Please enter a valid number.";
+        return;
+    }
+
+    // 3. Zero amount check
+    if (amount === 0) {
+        errorEl.textContent = "⚠ Amount cannot be zero.";
+        return;
     }
 
     // Clear any previous error message if validation passes
@@ -58,8 +73,11 @@ function addTransaction() {
     render();
 
     // Clear the input fields so the user can add another transaction immediately
-    document.getElementById("description").value = "";
-    document.getElementById("amount").value = "";
+    descEl.value = "";
+    amountEl.value = "";
+
+    // Return focus to the description field for better UX
+    descEl.focus();
 }
 
 
@@ -176,15 +194,31 @@ function render() {
         const sign           = t.amount > 0 ? "+" : "-";
         const formattedAmt   = `${sign}$${Math.abs(t.amount).toFixed(2)}`;
 
-        // Build the inner HTML for this list item
-        // - Left: description text
-        // - Middle: colored amount
-        // - Right: delete button that calls deleteTransaction() with this item's id
-        li.innerHTML = `
-            <span class="li-desc">${t.desc}</span>
-            <span class="li-amount" style="color: ${color}">${formattedAmt}</span>
-            <button class="delete" onclick="deleteTransaction(${t.id})">✕</button>
-        `;
+        // --- FIX #1: PREVENT XSS VULNERABILITY ---
+        // Instead of using innerHTML with user input, we now use safe DOM methods.
+        // This prevents malicious scripts from being injected via the description field.
+
+        // Create and populate the description span safely
+        const descSpan = document.createElement("span");
+        descSpan.className = "li-desc";
+        descSpan.textContent = t.desc;  // textContent is safe — it treats input as plain text
+
+        // Create the amount span (formatted amount is app-generated, not user input)
+        const amountSpan = document.createElement("span");
+        amountSpan.className = "li-amount";
+        amountSpan.style.color = color;
+        amountSpan.textContent = formattedAmt;
+
+        // Create the delete button
+        const deleteBtn = document.createElement("button");
+        deleteBtn.className = "delete";
+        deleteBtn.textContent = "✕";
+        deleteBtn.onclick = () => deleteTransaction(t.id);  // Use arrow function to bind the id safely
+
+        // Append all elements to the list item
+        li.appendChild(descSpan);
+        li.appendChild(amountSpan);
+        li.appendChild(deleteBtn);
 
         // Add the completed <li> to the <ul> list in the HTML
         listEl.appendChild(li);
